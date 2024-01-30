@@ -19,6 +19,10 @@ class ViewController: UIViewController {
         return button
     }()
     
+    @objc func backButtonPressed() {
+        print("Back Button pressed")
+    }
+    
     let productView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -33,14 +37,14 @@ class ViewController: UIViewController {
         label.textColor = .black
         label.textAlignment = .center
         label.text = "Kurt Shoro light 30 g"
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         
         return label
     }()
     
     let priceLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .lightGray
+        label.textColor = .systemGray3
         label.textAlignment = .center
         label.text = "405₸/pc"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -52,7 +56,7 @@ class ViewController: UIViewController {
         let sv = UIStackView()
         sv.axis = .horizontal
         sv.distribution = .fillEqually
-        sv.spacing = 15
+        sv.spacing = 10
         
         return sv
     }()
@@ -62,7 +66,7 @@ class ViewController: UIViewController {
         label.text = "sour"
         label.textAlignment = .center
         label.backgroundColor = UIColor(hexString: "#F5F5F5")
-        label.layer.cornerRadius = 5
+        label.layer.cornerRadius = 10
         label.clipsToBounds = true
         
         return label
@@ -73,7 +77,7 @@ class ViewController: UIViewController {
         label.text = "milk"
         label.textAlignment = .center
         label.backgroundColor = UIColor(hexString: "#F5F5F5")
-        label.layer.cornerRadius = 5
+        label.layer.cornerRadius = 10
         label.clipsToBounds = true
         
         return label
@@ -84,7 +88,7 @@ class ViewController: UIViewController {
         label.text = "desc"
         label.textAlignment = .center
         label.backgroundColor = UIColor(hexString: "#F5F5F5")
-        label.layer.cornerRadius = 5
+        label.layer.cornerRadius = 10
         label.clipsToBounds = true
         
         return label
@@ -100,9 +104,11 @@ class ViewController: UIViewController {
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = """
+        let attributedTitle = NSMutableAttributedString(string: "Description\n \n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: UIColor.black])
+        attributedTitle.append(NSAttributedString(string: """
         Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.
-        """
+        """, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
+        label.attributedText = attributedTitle
         label.textAlignment = .justified
         return label
     }()
@@ -119,7 +125,7 @@ class ViewController: UIViewController {
         label.textColor = .white
         label.textAlignment = .center
         label.text = "405₸/pc"
-        label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 20)
         
         return label
     }()
@@ -131,6 +137,10 @@ class ViewController: UIViewController {
         
         return button
     }()
+    
+    @objc func addButtonPressed() {
+        print("Add to cart button pressed")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,14 +150,6 @@ class ViewController: UIViewController {
         setupViews()
         setupConstraints()
         addTargets()
-    }
-    
-    @objc func backButtonPressed() {
-        print("Back Button pressed")
-    }
-    
-    @objc func addButtonPressed() {
-        print("Add to cart button pressed")
     }
 
     func setupViews() {
@@ -214,7 +216,7 @@ class ViewController: UIViewController {
         
         addButton.snp.makeConstraints { make in
             make.leading.equalTo(price2Label.snp.trailing).offset(10)
-            make.top.equalTo(greenView.snp.top).offset(10)
+            make.top.equalTo(greenView.snp.top).offset(6)
             make.width.height.equalTo(35)
         }
     }
