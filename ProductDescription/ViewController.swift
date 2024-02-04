@@ -31,7 +31,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .systemGray3
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.text = "405₸"
         
         return label
@@ -39,18 +40,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     private let brandLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.text = "Brand Name"
         
         return label
     }()
+    
+    let lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hexString: "#F5F5F5")
 
+        return view
+    }()
+    
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.text = "Description:"
+        
+        return label
+    }()
+
+    private let descriptionText: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemGray3
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.numberOfLines = 0
         label.text = """
-                Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.
+                Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.
                 """
         label.textAlignment = .justified
         
@@ -61,14 +78,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let button = UIButton()
         button.setTitle("Add to Cart", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 8
+        button.backgroundColor = UIColor(hexString: "#53C957")
+        button.contentVerticalAlignment = .top
         
         return button
     }()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.separatorStyle = .none
         
         return tableView
     }()
@@ -88,14 +106,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.backgroundColor = .white
         screenWidth = UIScreen.main.bounds.width
 
-        tableView.tableFooterView = UIView()
-
         view.addSubview(tableView)
+        view.addSubview(addToCartButton)
     }
     
     private func setupConstraints() {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        addToCartButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(80)
         }
     }
     
@@ -134,19 +157,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             make.top.equalTo(priceLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
-
+        
+        cell.contentView.addSubview(lineView)
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(brandLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(1)
+        }
+        
         cell.contentView.addSubview(descriptionLabel)
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(brandLabel.snp.bottom).offset(16)
+            make.top.equalTo(lineView.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
-        cell.contentView.addSubview(addToCartButton)
-        addToCartButton.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(16)
+        cell.contentView.addSubview(descriptionText)
+        descriptionText.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(16)
-            make.height.equalTo(44)
         }
 
         return cell
