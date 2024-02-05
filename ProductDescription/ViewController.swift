@@ -11,70 +11,20 @@ import SnapKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var screenWidth: CGFloat = 0
-
-    private let productImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "kurt")
+    var number = 0
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.allowsSelection = false
+        tableView.register(ImageCell.self, forCellReuseIdentifier: ImageCell.reuseIdentifier)
+        tableView.register(DetailsCell.self, forCellReuseIdentifier: DetailsCell.reuseIdentifier)
         
-        return imageView
-    }()
-
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.numberOfLines = 0
-        label.text = "Kurt Shoro light 30 g"
-        
-        return label
-    }()
-
-    private let priceLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemGray3
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.text = "405₸"
-        
-        return label
-    }()
-
-    private let brandLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.text = "Brand Name"
-        
-        return label
+        return tableView
     }()
     
-    let lineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(hexString: "#F5F5F5")
-
-        return view
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        label.text = "Description:"
-        
-        return label
-    }()
-
-    private let descriptionText: UILabel = {
-        let label = UILabel()
-        label.textColor = .systemGray3
-        label.font = UIFont.boldSystemFont(ofSize: 14)
-        label.numberOfLines = 0
-        label.text = """
-                Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.
-                """
-        label.textAlignment = .justified
-        
-        return label
-    }()
-
-    private let addToCartButton: UIButton = {
+    let addToCartButton: UIButton = {
         let button = UIButton()
         button.setTitle("Add to Cart", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -84,13 +34,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return button
     }()
     
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.separatorStyle = .none
-        
-        return tableView
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,13 +42,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         setupUI()
         setupConstraints()
-        addTargets()
     }
-
+    
     private func setupUI() {
         view.backgroundColor = .white
         screenWidth = UIScreen.main.bounds.width
-
+        addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
+        
         view.addSubview(tableView)
         view.addSubview(addToCartButton)
     }
@@ -116,72 +59,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         addToCartButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.height.equalTo(80)
+            make.bottom.leading.trailing.equalToSuperview()
+            make.height.equalTo(100)
         }
     }
     
-    private func addTargets() {
-        addToCartButton.addTarget(self, action: #selector(addToCartButtonTapped), for: .touchUpInside)
-    }
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.selectionStyle = .none
-
-        cell.contentView.addSubview(productImageView)
-        productImageView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.width.height.equalTo(screenWidth)
-        }
-
-        cell.contentView.addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(productImageView.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-        }
-
-        cell.contentView.addSubview(priceLabel)
-        priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
-
-        cell.contentView.addSubview(brandLabel)
-        brandLabel.snp.makeConstraints { make in
-            make.top.equalTo(priceLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        cell.contentView.addSubview(lineView)
-        lineView.snp.makeConstraints { make in
-            make.top.equalTo(brandLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(1)
-        }
-        
-        cell.contentView.addSubview(descriptionLabel)
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(lineView.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-
-        cell.contentView.addSubview(descriptionText)
-        descriptionText.snp.makeConstraints { make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-
-        return cell
-    }
-
+    
     @objc private func addToCartButtonTapped() {
-        print("add to cart button tapped!")
+        number += 1
+        addToCartButton.setTitle(String(number), for: .normal)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.reuseIdentifier, for: indexPath) as! ImageCell
+            cell.configure(imageName: "kurt")
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailsCell.reuseIdentifier, for: indexPath) as! DetailsCell
+            cell.configure(name: "Kurt Shoro light 30 g", price: "405₸", brand: "KazBeef", description: """
+                    Qurt(Құрт) is a traditional Kazakh dairy product made from fermented milk, usually from sheep, goat, or cow milk. It is a type of dried or dehydrated curd that is formed into small, round balls. The process of making qurt involves separating the whey from the milk, and then the remaining curd is formed into small pieces and air-dried.
+                    """)
+            return cell
+        default:
+            return UITableViewCell()
+        }
+        
     }
 }
 
@@ -204,6 +112,7 @@ extension UIColor {
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
 }
+
 
 
 
